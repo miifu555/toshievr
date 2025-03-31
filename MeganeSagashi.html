@@ -1,0 +1,32 @@
+<script type="module">
+  import * as eg from "https://js.sabae.cc/egvr.js";
+
+eg.sky("https://miifu555.github.io/toshievr/sabaest.jpg")
+eg.model("https://miifu555.github.io/toshievr/grasses.glb", 3, 0,2,90,0.3);
+eg.model("https://miifu555.github.io/toshievr/grasses.glb", -3, 0,-1,40,0.3);
+eg.model("https://miifu555.github.io/toshievr/grasses.glb", 0, 3,-1,10,0.3);
+eg.model("https://miifu555.github.io/toshievr/touki.glb", 2, 0, -6,0,0.1);
+eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3,0,0.1);
+
+const p = eg.text("鯖江駅へようこそ!!", 0, 3, -3, 8, eg.rgb(255, 0, 0));
+setInterval(() => {
+  const b = eg.isNear(p, 3.0);
+  p.setAttribute("visible", !b);
+}, 1000 / 60);
+
+const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, 0,0,0.5);
+mymodel.setAttribute('animation', {
+  property: 'position.y',
+  from: 1.2,
+  to: 1.6,
+  dur: 2000,          // 2秒間
+  dir: 'alternate',   // 往復
+  loop: true,         // 繰り返し
+  easing: 'easeInOutSine' // イージング関数
+});
+
+eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, 0,0,0.5);
+eg.image("https://miifu555.github.io/toshievr/syosyuku.jpg", 0, 1.2, 0,0.5,0.4);
+
+
+</script>
