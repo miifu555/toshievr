@@ -1,24 +1,30 @@
 <script type="module">
   import * as eg from "https://js.sabae.cc/egvr.js";
 
+  // --- 1. スコア管理の仕組み (ここを丸ごと差し替え) ---
   let score = 0;
-  const scoreText = eg.text("集めた数: 0", 1, 2, -3, 2, eg.rgb(255, 255, 255));
-  scoreText.setAttribute("text", {
-    value: "集めた数: 0",
-    align: "center",
-    width: 6
-  });
-
+  // 最初に表示するテキスト（最初は変数に入れておく）
+  let scoreText = eg.text("集めた数: 0", 1, 2, -3, 2, eg.rgb(255, 255, 255));
+  
   const updateScore = () => {
     score++;
-    console.log("現在のスコア:", score);
     
-    if (score === 5) {
-      scoreText.setAttribute("text", "value", "コンプリート！おめでとう！");
-      scoreText.setAttribute("text", "color", "yellow");
-    } else {
-      scoreText.setAttribute("text", "value", "集めた数: " + score);
+    // 1. 古いテキストを画面から消す
+    if (scoreText && scoreText.parentNode) {
+      scoreText.parentNode.removeChild(scoreText);
     }
+  
+    // 2. 新しい文字の内容を決める
+    let message = "集めた数: " + score;
+    let textColor = eg.rgb(255, 255, 255);
+  
+    if (score === 5) {
+      message = "コンプリート！おめでとう！";
+      textColor = eg.rgb(255, 255, 0); // 黄色
+    }
+  
+    // 3. 新しくテキストを作り直して代入する（座標は同じにする）
+    scoreText = eg.text(message, 1, 2, -3, 2, textColor);
   };
   
   let cam = document.querySelector("a-camera");
