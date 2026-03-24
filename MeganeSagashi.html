@@ -1,14 +1,17 @@
 <script type="module">
   import * as eg from "https://js.sabae.cc/egvr.js";
-  const cam = document.querySelector("a-camera") || document.querySelector("[camera]");
+  let cam = document.querySelector("a-camera");
+  
   if (!cam) {
-    const newCam = document.createElement("a-camera");
-    document.querySelector("a-scene").appendChild(newCam);
+    cam = document.createElement("a-camera");
+    cam.setAttribute("position", "0 1.6 0");
+    document.querySelector("a-scene").appendChild(cam);
   }
+  
   const cursor = document.createElement("a-cursor");
-  cursor.setAttribute("fuse", "true");          // 注視でクリック扱いにする
-  cursor.setAttribute("fuse-timeout", "1500");  // 1.5秒見つめたら反応
-  cursor.setAttribute("color", "red");          // 中心に赤い点を出す
+  cursor.setAttribute("fuse", "true");
+  cursor.setAttribute("fuse-timeout", "1500");
+  cursor.setAttribute("color", "red");
   cam.appendChild(cursor);
 
 eg.sky("https://miifu555.github.io/toshievr/sabaestation.jpg")
