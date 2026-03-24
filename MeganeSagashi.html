@@ -35,6 +35,12 @@ grass1.addEventListener('click', () => {
   
   grass1.addEventListener('animationcomplete__up', () => {
     grass1.parentNode.removeChild(grass1); // 自分自身をシーンから削除
+  score++; // 数を1増やす
+  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
+  if (score === 4) {
+    scoreText.setAttribute("value", "コンプリート！おめでとう！");
+    scoreText.setAttribute("color", "yellow");
+  }
   });
 });
 // -----------------------------------------------------------------
@@ -56,6 +62,12 @@ grass2.addEventListener('click', () => {
   
   grass2.addEventListener('animationcomplete__up', () => {
     grass2.parentNode.removeChild(grass2); // 自分自身をシーンから削除
+  score++; // 数を1増やす
+  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
+  if (score === 4) {
+    scoreText.setAttribute("value", "コンプリート！おめでとう！");
+    scoreText.setAttribute("color", "yellow");
+  }
   });
 });
 
@@ -78,6 +90,12 @@ grass3.addEventListener('click', () => {
   
   grass3.addEventListener('animationcomplete__up', () => {
     grass3.parentNode.removeChild(grass3); // 自分自身をシーンから削除
+  score++; // 数を1増やす
+  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
+  if (score === 4) {
+    scoreText.setAttribute("value", "コンプリート！おめでとう！");
+    scoreText.setAttribute("color", "yellow");
+  }
   });
 });
 // -----------------------------------------------------------------
@@ -99,6 +117,12 @@ cup1.addEventListener('click', () => {
   
   cup1.addEventListener('animationcomplete__up', () => {
     cup1.parentNode.removeChild(cup1); // 自分自身をシーンから削除
+  score++; // 数を1増やす
+  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
+  if (score === 4) {
+    scoreText.setAttribute("value", "コンプリート！おめでとう！");
+    scoreText.setAttribute("color", "yellow");
+  }
   });
 });
 // -----------------------------------------------------------------
@@ -120,6 +144,12 @@ cup2.addEventListener('click', () => {
   
   cup2.addEventListener('animationcomplete__up', () => {
     cup2.parentNode.removeChild(cup2); // 自分自身をシーンから削除
+  score++; // 数を1増やす
+  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
+  if (score === 4) {
+    scoreText.setAttribute("value", "コンプリート！おめでとう！");
+    scoreText.setAttribute("color", "yellow");
+  }
   });
 });
 // -----------------------------------------------------------------
@@ -129,6 +159,11 @@ setInterval(() => {
   const b = eg.isNear(p, 3.0);
   p.setAttribute("visible", !b);
 }, 1000 / 60);
+
+// 集めた数を数える変数
+let score = 0;
+// 画面にスコアを表示するテキスト（座標は調整してください）
+const scoreText = eg.text("集めた数: 0", 0, 2, -3, 5, eg.rgb(255, 255, 255));
   
 const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -2, 0, 0.5);
 mymodel.addEventListener('loaded', () => {
