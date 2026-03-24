@@ -14,19 +14,24 @@ setInterval(() => {
   p.setAttribute("visible", !b);
 }, 1000 / 60);
 
-const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1.2, -2,0,0.5);
+// 1. アニメーションするモデル（ここを -10 に）
+const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -10, 0, 0.5);
 mymodel.setAttribute('animation', {
-  property: 'position.y',
-  from: 1.2,
-  to: 1.6,
-  dur: 2000,          // 2秒間
-  dir: 'alternate',   // 往復
-  loop: true,         // 繰り返し
-  easing: 'easeInOutSine' // イージング関数
+  property: 'position.y',
+  // y座標のアニメーション範囲も必要に応じて調整
+  from: 1.2,
+  to: 1.6,
+  dur: 2000,
+  dir: 'alternate',
+  loop: true,
+  easing: 'easeInOutSine'
 });
 
-eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -2,0,0.5);
-eg.image("https://miifu555.github.io/toshievr/syosyuku.jpg", 0, 1.2, -2,0.5,0.4);
+// 2. 静止しているモデル（ここも -10 にしないと、元の場所に残ってしまう）
+eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -10, 0, 0.5);
+
+// 3. 重ねる画像（ここも -10 に合わせる）
+eg.image("https://miifu555.github.io/toshievr/syosyuku.jpg", 0, 1.2, -10, 0.5, 0.4);
 
 
 </script>
