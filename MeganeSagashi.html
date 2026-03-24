@@ -102,7 +102,27 @@ cup1.addEventListener('click', () => {
   });
 });
 // -----------------------------------------------------------------
-// eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3,0,0.1);
+const cup2 = eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3,0,,1);
+cup2.addEventListener('click', () => {
+  cup2.setAttribute('animation__up', {
+    property: 'position',
+    to: '2 3 -6',        // Y座標を5まで上げる
+    dur: 2000,          // 2秒かけて
+    easing: 'easeInQuad'
+  });
+
+  cup2.setAttribute('animation__rotate', {
+    property: 'rotation',
+    to: '0 360 0',      // 元の90度から360度足して450度（1回転）
+    dur: 2000,
+    easing: 'linear'
+  });
+  
+  cup2.addEventListener('animationcomplete__up', () => {
+    cup2.parentNode.removeChild(cup2); // 自分自身をシーンから削除
+  });
+});
+// -----------------------------------------------------------------
 
 const p = eg.text("鯖江駅へようこそ!!", 0, 3, -3, 8, eg.rgb(255, 0, 0));
 setInterval(() => {
