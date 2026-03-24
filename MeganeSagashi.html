@@ -10,18 +10,18 @@
   
   const cursor = document.createElement("a-cursor");
   cursor.setAttribute("fuse", "true");
-  cursor.setAttribute("fuse-timeout", "1500");
+  cursor.setAttribute("fuse-timeout", "1000");
   cursor.setAttribute("color", "red");
   cam.appendChild(cursor);
 
 eg.sky("https://miifu555.github.io/toshievr/sabaestation.jpg")
 
-const grass1 = eg.model("https://miifu555.github.io/toshievr/grasses.glb", 3, 0, 2, 90, 2);
-
+// -----------------------------------------------------------------
+const grass1 = eg.model("https://miifu555.github.io/toshievr/grasses.glb", 3, 0, 2, 90, 1.5);
 grass1.addEventListener('click', () => {
   grass1.setAttribute('animation__up', {
     property: 'position',
-    to: '3 5 2',        // Y座標を5まで上げる
+    to: '3 3 2',        // Y座標を5まで上げる
     dur: 2000,          // 2秒かけて
     easing: 'easeInQuad'
   });
@@ -37,11 +37,72 @@ grass1.addEventListener('click', () => {
     grass1.parentNode.removeChild(grass1); // 自分自身をシーンから削除
   });
 });
+// -----------------------------------------------------------------
+const grass2 = eg.model("https://miifu555.github.io/toshievr/grasses.glb",-3, 0,-1,40,1.5);
+grass1.addEventListener('click', () => {
+  grass1.setAttribute('animation__up', {
+    property: 'position',
+    to: '-3 3 -1',        // Y座標を5まで上げる
+    dur: 2000,          // 2秒かけて
+    easing: 'easeInQuad'
+  });
 
-eg.model("https://miifu555.github.io/toshievr/grasses.glb", -3, 0,-1,40,0.3);
-eg.model("https://miifu555.github.io/toshievr/grasses.glb", 0, 3,-1,10,0.3);
-eg.model("https://miifu555.github.io/toshievr/touki.glb", 2, 0, -6,0,0.1);
-eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3,0,0.1);
+  grass1.setAttribute('animation__rotate', {
+    property: 'rotation',
+    to: '0 400 0',      // 元の90度から360度足して450度（1回転）
+    dur: 2000,
+    easing: 'linear'
+  });
+  
+  grass1.addEventListener('animationcomplete__up', () => {
+    grass1.parentNode.removeChild(grass2); // 自分自身をシーンから削除
+  });
+});
+
+// -----------------------------------------------------------------
+const grass3 = eg.model("https://miifu555.github.io/toshievr/grasses.glb", 0, 3,-1,10,1.5);
+grass1.addEventListener('click', () => {
+  grass1.setAttribute('animation__up', {
+    property: 'position',
+    to: '0 6 -1',        // Y座標を5まで上げる
+    dur: 2000,          // 2秒かけて
+    easing: 'easeInQuad'
+  });
+
+  grass1.setAttribute('animation__rotate', {
+    property: 'rotation',
+    to: '0 370 0',      // 元の90度から360度足して450度（1回転）
+    dur: 2000,
+    easing: 'linear'
+  });
+  
+  grass1.addEventListener('animationcomplete__up', () => {
+    grass1.parentNode.removeChild(grass3); // 自分自身をシーンから削除
+  });
+});
+// -----------------------------------------------------------------
+const cup1 = eg.model("https://miifu555.github.io/toshievr/touki.glb", 2, 0, -6,0,1);
+grass1.addEventListener('click', () => {
+  grass1.setAttribute('animation__up', {
+    property: 'position',
+    to: '2 3 -6',        // Y座標を5まで上げる
+    dur: 2000,          // 2秒かけて
+    easing: 'easeInQuad'
+  });
+
+  grass1.setAttribute('animation__rotate', {
+    property: 'rotation',
+    to: '0 360 0',      // 元の90度から360度足して450度（1回転）
+    dur: 2000,
+    easing: 'linear'
+  });
+  
+  grass1.addEventListener('animationcomplete__up', () => {
+    grass1.parentNode.removeChild(cup1); // 自分自身をシーンから削除
+  });
+});
+// -----------------------------------------------------------------
+// eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3,0,0.1);
 
 const p = eg.text("鯖江駅へようこそ!!", 0, 3, -3, 8, eg.rgb(255, 0, 0));
 setInterval(() => {
