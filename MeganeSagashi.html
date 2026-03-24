@@ -15,16 +15,19 @@ setInterval(() => {
 }, 1000 / 60);
 
 // 1. アニメーションするモデル（ここを -10 に）
-const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -10, 0, 0.5);
-mymodel.setAttribute('animation', {
-  property: 'position.y',
-  // y座標のアニメーション範囲も必要に応じて調整
-  from: 1.2,
-  to: 1.6,
-  dur: 2000,
-  dir: 'alternate',
-  loop: true,
-  easing: 'easeInOutSine'
+const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -5, 0, 0.5);
+
+// モデルの読み込み完了（loaded）を待ってから実行
+mymodel.addEventListener('loaded', () => {
+  mymodel.setAttribute('animation', {
+    property: 'position', // position.y ではなく position 全体を指定
+    from: '0 1.2 -5',     // x y z をスペース区切りで指定
+    to: '0 1.6 -5',
+    dur: 2000,
+    dir: 'alternate',
+    loop: true,
+    easing: 'easeInOutSine'
+  });
 });
 
 // 2. 静止しているモデル（ここも -10 にしないと、元の場所に残ってしまう）
