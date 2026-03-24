@@ -155,10 +155,6 @@ cup2.addEventListener('click', () => {
 // -----------------------------------------------------------------
 
 const p = eg.text("鯖江駅へようこそ!!", 0, 3, -3, 8, eg.rgb(255, 0, 0));
-setInterval(() => {
-  const b = eg.isNear(p, 3.0);
-  p.setAttribute("visible", !b);
-}, 1000 / 60);
 
 // 集めた数を数える変数
 let score = 0;
