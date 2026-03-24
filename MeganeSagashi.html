@@ -1,5 +1,10 @@
 <script type="module">
   import * as eg from "https://js.sabae.cc/egvr.js";
+  // 集めた数を数える変数
+  let score = 0;
+  // 画面にスコアを表示するテキスト（座標は調整してください）
+  const scoreText = eg.text("集めた数: 0", 0, 2, -3, 2, eg.rgb(255, 255, 255));
+
   let cam = document.querySelector("a-camera");
   
   if (!cam) {
@@ -155,11 +160,6 @@ cup2.addEventListener('click', () => {
 // -----------------------------------------------------------------
 
 const p = eg.text("鯖江駅へようこそ!!", 0, 3, -3, 8, eg.rgb(255, 0, 0));
-
-// 集めた数を数える変数
-let score = 0;
-// 画面にスコアを表示するテキスト（座標は調整してください）
-const scoreText = eg.text("集めた数: 0", 0, 2, -3, 2, eg.rgb(255, 255, 255));
   
 const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -2, 0, 0.5);
 mymodel.addEventListener('loaded', () => {
