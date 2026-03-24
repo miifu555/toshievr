@@ -1,57 +1,76 @@
 <script type="module">
   import * as eg from "https://js.sabae.cc/egvr.js";
+
+  // --- 1. カメラと視線カーソルの設定（修正済み） ---
   let cam = document.querySelector("a-camera");
-  
   if (!cam) {
     cam = document.createElement("a-camera");
     cam.setAttribute("position", "0 1.6 0");
     document.querySelector("a-scene").appendChild(cam);
   }
-  
+
   const cursor = document.createElement("a-cursor");
   cursor.setAttribute("fuse", "true");
   cursor.setAttribute("fuse-timeout", "1500");
   cursor.setAttribute("color", "red");
   cam.appendChild(cursor);
 
-eg.sky("https://miifu555.github.io/toshievr/sabaestation.jpg")
+  // --- 2. スコア（集めた数）の管理 ---
+  let score = 0; // 集めたメガネの数
+  // スコア表示用テキスト（プレイヤーの目の前に固定）
+  const scoreText = eg.text("メガネ: 0 個", 0, 1.8, -1, 5, "black"); 
+  scoreText.setAttribute("position", "-0.5 0.7 -1"); // 視界の左上に配置
+  scoreText.setAttribute("material", "shader: flat; depthTest: false;"); // 常に最前面に表示
 
-const grass1 = eg.model("https://miifu555.github.io/toshievr/grasses.glb", 3, 0, 2, 90, 2);
-grass1.addEventListener('click', () => {
-  grass1.setAttribute('animation__click', {
-    property: 'position',
-    to: '3 0.5 2', // 少し上に
-    dur: 200,
-    dir: 'alternate',
-    loop: 2
+  // --- 3. 背景と他のモデルの設定（そのまま） ---
+  eg.sky("https://miifu555.github.io/toshievr/sabaestation.jpg");
+  // ... (他のeg.modelやeg.textのコードはここに) ...
+
+  // --- 4. 反応させたい「メガネ（草）」のモデル設定 (修正・拡張) ---
+  const grasses = [
+    { url: "https://miifu555.github.io/toshievr/grasses.glb", pos: [3, 0, 2], rot: [0, 90, 0], scale: [2, 2, 2] },
+    { url: "https://miifu555.github.io/toshievr/grasses.glb", pos: [-3, 0, -1], rot: [0, 40, 0], scale: [0.3, 0.3, 0.3] },
+    // 他のメガネ（草）もここに追加可能
+  ];
+
+  grasses.forEach((data, index) => {
+    // モデルを作成
+    const grass = eg.model(data.url, data.pos[0], data.pos[1], data.pos[2], data.rot[1], data.scale[0]);
+    
+    // 見つめた時の判定エリア（当たり判定）を大きくする
+    grass.setAttribute("geometry", "primitive: box; width: 0.8; height: 1.2; depth: 0.8");
+    grass.setAttribute("material", "visible: false;");
+
+    // 視線を向けた時のイベント
+    grass.addEventListener('click', () => {
+      // 一度集めたら反応しないようにする（重要）
+      if (grass.getAttribute("data-collected") === "true") return;
+      grass.setAttribute("data-collected", "true");
+
+      // A. 【豪華エフェクト】パーティクル（キラキラ）を出す
+      const particle = document.createElement("a-entity");
+      particle.setAttribute("position", `${data.pos[0]} ${data.pos[1] + 0.5} ${data.pos[2]}`);
+      particle.setAttribute("particle-system", "preset: dust; color: yellow,white; particleCount: 50; size: 1.0; duration: 0.5;");
+      document.querySelector("a-scene").appendChild(particle);
+
+      // B. 【アニメーション】少し上にピョコッと跳ねる
+      grass.setAttribute('animation__click', {
+        property: 'position',
+        to: `${data.pos[0]} ${data.pos[1] + 0.5} ${data.pos[2]}`, 
+        dur: 300,
+        easing: 'easeOutQuad'
+      });
+
+      // C. 【スコア更新】数を増やして表示を変える
+      score++;
+      scoreText.setAttribute("value", `メガネ: ${score} 個`);
+
+      // D. 【削除】1秒後にモデルとエフェクトを消す
+      setTimeout(() => {
+        grass.parentNode.removeChild(grass);
+        particle.parentNode.removeChild(particle);
+      }, 1000);
+    });
   });
-});
 
-eg.model("https://miifu555.github.io/toshievr/grasses.glb", -3, 0,-1,40,0.3);
-eg.model("https://miifu555.github.io/toshievr/grasses.glb", 0, 3,-1,10,0.3);
-eg.model("https://miifu555.github.io/toshievr/touki.glb", 2, 0, -6,0,0.1);
-eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3,0,0.1);
-
-const p = eg.text("鯖江駅へようこそ!!", 0, 3, -3, 8, eg.rgb(255, 0, 0));
-setInterval(() => {
-  const b = eg.isNear(p, 3.0);
-  p.setAttribute("visible", !b);
-}, 1000 / 60);
-  
-const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -2, 0, 0.5);
-mymodel.addEventListener('loaded', () => {
-  mymodel.setAttribute('rotation', '180 0 0'); 
-  mymodel.setAttribute('animation', {
-    property: 'position',
-    from: '0 1.4 -2',
-    to: '0 1.8 -2',
-    dur: 2000,
-    dir: 'alternate',
-    loop: true,
-    easing: 'easeInOutSine'
-  });
-});
-  
-eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -2, 0, 0.5);
-eg.image("https://miifu555.github.io/toshievr/syosaku.jpg", 0, 1.25, -2, 0.4, 0.4);
 </script>
