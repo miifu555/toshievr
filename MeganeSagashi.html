@@ -1,179 +1,71 @@
 <script type="module">
-  import * as eg from "https://js.sabae.cc/egvr.js";
-  // 集めた数を数える変数
-  let score = 0;
-  // 画面にスコアを表示するテキスト（座標は調整してください）
-  const scoreText = eg.text("集めた数: 0", 0, 2, -3, 2, eg.rgb(255, 255, 255));
+import * as eg from "https://js.sabae.cc/egvr.js";
 
-  let cam = document.querySelector("a-camera");
-  
-  if (!cam) {
-    cam = document.createElement("a-camera");
-    cam.setAttribute("position", "0 1.6 0");
-    document.querySelector("a-scene").appendChild(cam);
+// --- 1. スコア管理の仕組み (最初に行う) ---
+let score = 0;
+// 座標を少し手前(z=-2)にして、サイズを3に調整
+const scoreText = eg.text("集めた数: 0", 0, 3, -2, 3, eg.rgb(255, 255, 255));
+
+// スコアを更新する専用の命令
+const updateScore = () => {
+  score++;
+  if (score >= 5) {
+    scoreText.setAttribute("text", "value", "コンプリート！おめでとう！");
+    scoreText.setAttribute("text", "color", "yellow");
+  } else {
+    scoreText.setAttribute("text", "value", "集めた数: " + score);
   }
-  
-  const cursor = document.createElement("a-cursor");
-  cursor.setAttribute("fuse", "true");
-  cursor.setAttribute("fuse-timeout", "1000");
-  cursor.setAttribute("color", "red");
-  cam.appendChild(cursor);
+};
 
-eg.sky("https://miifu555.github.io/toshievr/sabaestation.jpg")
+// --- 2. カメラとカーソルの設定 ---
+let cam = document.querySelector("a-camera");
+if (!cam) {
+  cam = document.createElement("a-camera");
+  cam.setAttribute("position", "0 1.6 0");
+  document.querySelector("a-scene").appendChild(cam);
+}
+const cursor = document.createElement("a-cursor");
+cursor.setAttribute("fuse", "true");
+cursor.setAttribute("fuse-timeout", "1000");
+cursor.setAttribute("color", "red");
+cam.appendChild(cursor);
 
-// -----------------------------------------------------------------
-const grass1 = eg.model("https://miifu555.github.io/toshievr/grasses.glb", 3, 0, 2, 90, 1.5);
-grass1.addEventListener('click', () => {
-  grass1.setAttribute('animation__up', {
-    property: 'position',
-    to: '3 3 2',        // Y座標を5まで上げる
-    dur: 2000,          // 2秒かけて
-    easing: 'easeInQuad'
-  });
+eg.sky("https://miifu555.github.io/toshievr/sabaestation.jpg");
 
-  grass1.setAttribute('animation__rotate', {
-    property: 'rotation',
-    to: '0 450 0',      // 元の90度から360度足して450度（1回転）
-    dur: 2000,
-    easing: 'linear'
+// --- 3. オブジェクトの設定 (共通化してミスを防ぐ) ---
+const setupTarget = (obj, tx, ty, tz, trot) => {
+  obj.addEventListener('click', () => {
+    obj.setAttribute('animation__up', { property: 'position', to: `${tx} ${ty} ${tz}`, dur: 2000, easing: 'easeInQuad' });
+    obj.setAttribute('animation__rotate', { property: 'rotation', to: `0 ${trot} 0`, dur: 2000, easing: 'linear' });
+    
+    // アニメーションが終わったら消してスコア加算
+    obj.addEventListener('animationcomplete__up', () => {
+      if (obj.parentNode) {
+        obj.parentNode.removeChild(obj);
+        updateScore(); // ここでスコアを増やす
+      }
+    });
   });
-  
-  grass1.addEventListener('animationcomplete__up', () => {
-    grass1.parentNode.removeChild(grass1); // 自分自身をシーンから削除
-  score++; // 数を1増やす
-  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
-  if (score === 5) {
-    scoreText.setAttribute("value", "コンプリート！おめでとう！");
-    scoreText.setAttribute("color", "yellow");
-  }
-  });
-});
-// -----------------------------------------------------------------
-const grass2 = eg.model("https://miifu555.github.io/toshievr/grasses.glb",-3, 0,-1,40,1.5);
-grass2.addEventListener('click', () => {
-  grass2.setAttribute('animation__up', {
-    property: 'position',
-    to: '-3 3 -1',        // Y座標を5まで上げる
-    dur: 2000,          // 2秒かけて
-    easing: 'easeInQuad'
-  });
+};
 
-  grass2.setAttribute('animation__rotate', {
-    property: 'rotation',
-    to: '0 400 0',      // 元の90度から360度足して450度（1回転）
-    dur: 2000,
-    easing: 'linear'
-  });
-  
-  grass2.addEventListener('animationcomplete__up', () => {
-    grass2.parentNode.removeChild(grass2); // 自分自身をシーンから削除
-  score++; // 数を1増やす
-  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
-  if (score === 5) {
-    scoreText.setAttribute("value", "コンプリート！おめでとう！");
-    scoreText.setAttribute("color", "yellow");
-  }
-  });
-});
+// 各モデルの登録
+setupTarget(eg.model("https://miifu555.github.io/toshievr/grasses.glb", 3, 0, 2, 90, 1.5), 3, 3, 2, 450);
+setupTarget(eg.model("https://miifu555.github.io/toshievr/grasses.glb", -3, 0, -1, 40, 1.5), -3, 3, -1, 400);
+setupTarget(eg.model("https://miifu555.github.io/toshievr/grasses.glb", 0, 3, -1, 10, 1.5), 0, 6, -1, 370);
+setupTarget(eg.model("https://miifu555.github.io/toshievr/touki.glb", 2, 0, -6, 0, 1), 2, 3, -6, 360);
+setupTarget(eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3, 0, 1), 4, 3, 3, 360);
 
-// -----------------------------------------------------------------
-const grass3 = eg.model("https://miifu555.github.io/toshievr/grasses.glb", 0, 3,-1,10,1.5);
-grass3.addEventListener('click', () => {
-  grass3.setAttribute('animation__up', {
-    property: 'position',
-    to: '0 6 -1',        // Y座標を5まで上げる
-    dur: 2000,          // 2秒かけて
-    easing: 'easeInQuad'
-  });
-
-  grass3.setAttribute('animation__rotate', {
-    property: 'rotation',
-    to: '0 370 0',      // 元の90度から360度足して450度（1回転）
-    dur: 2000,
-    easing: 'linear'
-  });
-  
-  grass3.addEventListener('animationcomplete__up', () => {
-    grass3.parentNode.removeChild(grass3); // 自分自身をシーンから削除
-  score++; // 数を1増やす
-  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
-  if (score === 5) {
-    scoreText.setAttribute("value", "コンプリート！おめでとう！");
-    scoreText.setAttribute("color", "yellow");
-  }
-  });
-});
-// -----------------------------------------------------------------
-const cup1 = eg.model("https://miifu555.github.io/toshievr/touki.glb", 2, 0, -6,0,1);
-cup1.addEventListener('click', () => {
-  cup1.setAttribute('animation__up', {
-    property: 'position',
-    to: '2 3 -6',        // Y座標を5まで上げる
-    dur: 2000,          // 2秒かけて
-    easing: 'easeInQuad'
-  });
-
-  cup1.setAttribute('animation__rotate', {
-    property: 'rotation',
-    to: '0 360 0',      // 元の90度から360度足して450度（1回転）
-    dur: 2000,
-    easing: 'linear'
-  });
-  
-  cup1.addEventListener('animationcomplete__up', () => {
-    cup1.parentNode.removeChild(cup1); // 自分自身をシーンから削除
-  score++; // 数を1増やす
-  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
-  if (score === 5) {
-    scoreText.setAttribute("value", "コンプリート！おめでとう！");
-    scoreText.setAttribute("color", "yellow");
-  }
-  });
-});
-// -----------------------------------------------------------------
-const cup2 = eg.model("https://miifu555.github.io/toshievr/touki.glb", 4, 0, 3,0,1);
-cup2.addEventListener('click', () => {
-  cup2.setAttribute('animation__up', {
-    property: 'position',
-    to: '4 3 3',        // Y座標を5まで上げる
-    dur: 2000,          // 2秒かけて
-    easing: 'easeInQuad'
-  });
-
-  cup2.setAttribute('animation__rotate', {
-    property: 'rotation',
-    to: '0 360 0',      // 元の90度から360度足して450度（1回転）
-    dur: 2000,
-    easing: 'linear'
-  });
-  
-  cup2.addEventListener('animationcomplete__up', () => {
-    cup2.parentNode.removeChild(cup2); // 自分自身をシーンから削除
-  score++; // 数を1増やす
-  scoreText.setAttribute("value", "集めた数: " + score); // テキストを書き換える
-  if (score === 5) {
-    scoreText.setAttribute("value", "コンプリート！おめでとう！");
-    scoreText.setAttribute("color", "yellow");
-  }
-  });
-});
-// -----------------------------------------------------------------
-
-const p = eg.text("鯖江駅へようこそ!!", 0, 3, -3, 5, eg.rgb(255, 0, 0));
-  
-const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -2, 0, 0.5);
+// --- 4. 装飾用モデル (浮遊するモデル) ---
+const mymodel = eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1.4, -2, 0, 0.5);
 mymodel.addEventListener('loaded', () => {
   mymodel.setAttribute('rotation', '180 0 0'); 
   mymodel.setAttribute('animation', {
-    property: 'position',
-    from: '0 1.4 -2',
-    to: '0 1.8 -2',
-    dur: 2000,
-    dir: 'alternate',
-    loop: true,
-    easing: 'easeInOutSine'
+    property: 'position', from: '0 1.4 -2', to: '0 1.8 -2',
+    dur: 2000, dir: 'alternate', loop: true, easing: 'easeInOutSine'
   });
 });
+
+eg.text("鯖江駅へようこそ!!", 0, 4, -3, 2, eg.rgb(255, 0, 0));
   
 eg.model("https://miifu555.github.io/toshievr/touki.glb", 0, 1, -2, 0, 0.5);
 eg.image("https://miifu555.github.io/toshievr/syosaku.jpg", 0, 1.25, -2, 0.4, 0.4);
