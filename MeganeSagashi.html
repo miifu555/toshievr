@@ -39,66 +39,66 @@ grass1.addEventListener('click', () => {
 });
 // -----------------------------------------------------------------
 const grass2 = eg.model("https://miifu555.github.io/toshievr/grasses.glb",-3, 0,-1,40,1.5);
-grass1.addEventListener('click', () => {
-  grass1.setAttribute('animation__up', {
+grass2.addEventListener('click', () => {
+  grass2.setAttribute('animation__up', {
     property: 'position',
     to: '-3 3 -1',        // Y座標を5まで上げる
     dur: 2000,          // 2秒かけて
     easing: 'easeInQuad'
   });
 
-  grass1.setAttribute('animation__rotate', {
+  grass2.setAttribute('animation__rotate', {
     property: 'rotation',
     to: '0 400 0',      // 元の90度から360度足して450度（1回転）
     dur: 2000,
     easing: 'linear'
   });
   
-  grass1.addEventListener('animationcomplete__up', () => {
-    grass1.parentNode.removeChild(grass2); // 自分自身をシーンから削除
+  grass2.addEventListener('animationcomplete__up', () => {
+    grass2.parentNode.removeChild(grass2); // 自分自身をシーンから削除
   });
 });
 
 // -----------------------------------------------------------------
 const grass3 = eg.model("https://miifu555.github.io/toshievr/grasses.glb", 0, 3,-1,10,1.5);
-grass1.addEventListener('click', () => {
-  grass1.setAttribute('animation__up', {
+grass3.addEventListener('click', () => {
+  grass3.setAttribute('animation__up', {
     property: 'position',
     to: '0 6 -1',        // Y座標を5まで上げる
     dur: 2000,          // 2秒かけて
     easing: 'easeInQuad'
   });
 
-  grass1.setAttribute('animation__rotate', {
+  grass3.setAttribute('animation__rotate', {
     property: 'rotation',
     to: '0 370 0',      // 元の90度から360度足して450度（1回転）
     dur: 2000,
     easing: 'linear'
   });
   
-  grass1.addEventListener('animationcomplete__up', () => {
-    grass1.parentNode.removeChild(grass3); // 自分自身をシーンから削除
+  grass3.addEventListener('animationcomplete__up', () => {
+    grass3.parentNode.removeChild(grass3); // 自分自身をシーンから削除
   });
 });
 // -----------------------------------------------------------------
 const cup1 = eg.model("https://miifu555.github.io/toshievr/touki.glb", 2, 0, -6,0,1);
-grass1.addEventListener('click', () => {
-  grass1.setAttribute('animation__up', {
+cup1.addEventListener('click', () => {
+  cup1.setAttribute('animation__up', {
     property: 'position',
     to: '2 3 -6',        // Y座標を5まで上げる
     dur: 2000,          // 2秒かけて
     easing: 'easeInQuad'
   });
 
-  grass1.setAttribute('animation__rotate', {
+  cup1.setAttribute('animation__rotate', {
     property: 'rotation',
     to: '0 360 0',      // 元の90度から360度足して450度（1回転）
     dur: 2000,
     easing: 'linear'
   });
   
-  grass1.addEventListener('animationcomplete__up', () => {
-    grass1.parentNode.removeChild(cup1); // 自分自身をシーンから削除
+  cup1.addEventListener('animationcomplete__up', () => {
+    cup1.parentNode.removeChild(cup1); // 自分自身をシーンから削除
   });
 });
 // -----------------------------------------------------------------
