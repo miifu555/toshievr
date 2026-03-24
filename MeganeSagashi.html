@@ -3,9 +3,16 @@
 
   let score = 0;
   const scoreText = eg.text("集めた数: 0", 1, 2, -3, 2, eg.rgb(255, 255, 255));
+  scoreText.setAttribute("text", {
+    value: "集めた数: 0",
+    align: "center",
+    width: 6
+  });
 
   const updateScore = () => {
     score++;
+    console.log("現在のスコア:", score);
+    
     if (score === 5) {
       scoreText.setAttribute("text", "value", "コンプリート！おめでとう！");
       scoreText.setAttribute("text", "color", "yellow");
